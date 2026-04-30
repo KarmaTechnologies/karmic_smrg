@@ -26,3 +26,22 @@ export async function getJournalBySlug(slug: string): Promise<Journal | null> {
   const journals = await getJournals();
   return journals.find((journal) => journal.slug === slug) ?? null;
 }
+
+// lib/api.ts
+export async function fetchFeaturedJournals() {
+  const res = await fetch("https://smrg.arditsonline.com/api/home/journals", { cache: "no-store" });
+  if (!res.ok) throw new Error("Failed to fetch featured journals");
+   const data = await res.json();
+   // If your API returns { data: [...] }
+  return data.data; // <-- return the array
+  // If your API returns an array directly, just return data;\
+}
+
+
+export async function fetchAllJournals() {
+  const res = await fetch("https://smrg.arditsonline.com/api/home/journals", { cache: "no-store" });
+  if (!res.ok) throw new Error("Failed to fetch journals");
+  const data = await res.json();
+  // If your API returns { data: [...] }
+  return data.data; // <-- return the array
+}

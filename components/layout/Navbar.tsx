@@ -5,6 +5,9 @@ import { useState, useEffect } from "react";
 import Container from "./Container";
 import { primaryNav } from "@/lib/constants";
 import "./Navbar.css";
+import { fetchAllJournals } from "@/lib/api";
+import { Journal } from "@/types/journal";
+
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -13,6 +16,15 @@ export default function Navbar() {
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
+  
+  const [journals, setJournals] = useState<Journal[]>([]);
+  
+  useEffect(() => {
+    fetchAllJournals().then(data => {
+      setJournals(Array.isArray(data) ? data : data.data); // Handle both array and { data: [...] } formats
+    });
+  }, []);
+
 
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
@@ -46,24 +58,33 @@ export default function Navbar() {
           {/* Desktop Navigation */}
           <div className="nav-desktop-section">
             <div className="nav-menu">
-              {primaryNav.map((item) => (
-                <div key={item.href} className="nav-item-wrap">
-                  <Link href={item.href} className="nav-link">
-                    {item.label}
-                    {item.children && <span className="chevron-down"></span>}
-                  </Link>
-
-                  {item.children && (
-                    <div className="nav-dropdown">
-                      {item.children.map((child) => (
-                        <Link key={child.href} href={child.href} className="nav-dropdown-link">
-                          {child.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
+              {primaryNav.map((item) =>
+  item.label === "Journals" ? (
+    <div key={item.label} className="nav-item-wrap">
+      <Link href={item.href} className="nav-link">{item.label}</Link>
+      <div className="nav-dropdown">
+        {Array.isArray(journals) && journals.map((journal) => (
+          <Link key={journal.id} href={`/journal/${journal.slug}`} className="nav-dropdown-link">
+            {journal.title}
+          </Link>
+        ))}
+      </div>
+    </div>
+  ) : (
+    <div key={item.href} className="nav-item-wrap">
+      <Link href={item.href} className="nav-link">{item.label}</Link>
+      {item.children && (
+        <div className="nav-dropdown">
+          {item.children.map((child) => (
+            <Link key={child.href} href={child.href} className="nav-dropdown-link">
+              {child.label}
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+)}
             </div>
 
             <div className="nav-auth-buttons">

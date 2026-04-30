@@ -3,11 +3,12 @@ import Card from "@/components/ui/Card";
 import Link from "next/link";
 import Image from "next/image";
 
+
 export default function JournalCard({ journal }: { journal: Journal }) {
   return (
     <Link href={`/journal/${journal.slug}`} className="journal-card-link" aria-label={`Open ${journal.title}`}>
       <Card className="journal-card">
-        <div style={{ width: "100%", aspectRatio: "16 / 9", overflow: "hidden", borderTopLeftRadius: "14px", borderTopRightRadius: "14px" }}>
+        <div style={{ width: "100%", aspectRatio: "2 / 3", overflow: "hidden", borderTopLeftRadius: "14px", borderTopRightRadius: "14px" }}>
           <div style={{ position: "relative", width: "100%", height: "100%" }}>
             <Image
               src={journal.image}
@@ -24,5 +25,7 @@ export default function JournalCard({ journal }: { journal: Journal }) {
         </div>
       </Card>
     </Link>
-  );
+  );  
 }
+
+

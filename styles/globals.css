@@ -252,6 +252,57 @@ a {
   opacity: 0.8;
 }
 
+
+.journal-carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.journal-carousel > div {
+  flex: 0 0 calc(33.333% - 1rem); /* 3 cards per view */
+  max-width: calc(33.333% - 1rem);
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  background: white;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  opacity: 0.7;
+}
+
+.arrow.left {
+  left: 0;
+}
+
+.arrow.right {
+  right: 0;
+}
+
+
+@media (max-width: 900px) {
+  .journal-carousel > div {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+}
+@media (max-width: 600px) {
+  .journal-carousel > div {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+
+
 .journal-card-link {
   display: block;
 }

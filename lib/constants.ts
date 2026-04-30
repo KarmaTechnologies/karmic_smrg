@@ -8,7 +8,14 @@ export const primaryNav: NavItem[] = [
     label: "Journals",
     href: "/journals",
     children: [
-      { label: "Explore", href: "/explore" },
+      
+    ],
+  },
+
+  {
+    label: "Explore",
+    href: "/explore",
+    children: [
       { label: "All Articles", href: "/explore/articles" },
       { label: "Exploratory Hypotheses", href: "/explore/hypotheses" },
       { label: "Lab Tours", href: "/explore/lab-tours" },
@@ -17,6 +24,8 @@ export const primaryNav: NavItem[] = [
       { label: "Slide Presentations", href: "/explore/slides" },
     ],
   },
+
+
   {
     label: "Submission",
     href: "/submission",
@@ -30,16 +39,6 @@ export const primaryNav: NavItem[] = [
     ],
   },
   {
-    label: "Dashboard",
-    href: "/dashboard",
-    children: [
-      { label: "Author Dashboard", href: "/dashboard/author" },
-      { label: "Reviewer Dashboard", href: "/dashboard/reviewer" },
-      { label: "Editorial Board Dashboard", href: "/dashboard/editorial" },
-      { label: "Discussion Host Dashboard", href: "/dashboard/discussion-host" },
-    ],
-  },
-  {
     label: "Guidelines",
     href: "/guidelines",
     children: [
@@ -50,6 +49,18 @@ export const primaryNav: NavItem[] = [
       { label: "Media Annex Guidelines", href: "/guidelines/media-annex" },
     ],
   },
+  
+  // {
+  //   label: "Dashboard",
+  //   href: "/dashboard",
+  //   children: [
+  //     { label: "Author Dashboard", href: "/dashboard/author" },
+  //     { label: "Reviewer Dashboard", href: "/dashboard/reviewer" },
+  //     { label: "Editorial Board Dashboard", href: "/dashboard/editorial" },
+  //     { label: "Discussion Host Dashboard", href: "/dashboard/discussion-host" },
+  //   ],
+  // },
+  
   {
     label: "Services",
     href: "/services",
@@ -57,8 +68,8 @@ export const primaryNav: NavItem[] = [
       { label: "Membership", href: "/services/membership" },
       { label: "Advertisement", href: "/services/advertisement" },
       { label: "Academic Writing Support", href: "/services/academic-writing-support" },
-      { label: "Research Video Production", href: "/services/research-video-production" },
-      { label: "Scientific Graphics Design", href: "/services/scientific-graphics-design" },
+      { label: "Video Production", href: "/services/video-production" },
+      { label: "Graphics Design", href: "/services/graphics-design" },
     ],
   },
   {
@@ -87,26 +98,26 @@ export const services = [
   { title: "Graphics Design", description: "Publication-ready visuals and infographics." },
 ];
 
-export const featuredJournals = [
-  {
-    id: 1,
-    title: "The Journal of advanced Pharmacy Education & Research",
-    slug: "the-journal-of-advanced-pharmacy-education-research",
-    image: "https://smrg.arditsonline.com/public/admin/Journal_Images/3601767783787.jpeg",
-    publisher_name: "SMRG",
-  },
-  {
-    id: 2,
-    title: "Innovations in Intelligent Medicine and Healthcare Systems",
-    slug: "innovations-in-intelligent-medicine-and-healthcare-systems",
-    image: "https://smrg.arditsonline.com/public/admin/Journal_Images/4531768295389.jpeg",
-    publisher_name: "SMRG",
-  },
-  {
-    id: 3,
-    title: "Neurology and Behavioral Science: A Neuropsychiatry Journal",
-    slug: "neurology-and-behavioral-science-a-neuropsychiatry-journal",
-    image: "https://smrg.arditsonline.com/public/admin/Journal_Images/6391767783859.jpeg",
-    publisher_name: "SMRG",
-  },
-];
+// export const featuredJournals = [
+//   {
+//     id: 1,
+//     title: "The Journal of advanced Pharmacy Education & Research",
+//     slug: "the-journal-of-advanced-pharmacy-education-research",
+//     image: "https://smrg.arditsonline.com/public/admin/Journal_Images/3601767783787.jpeg",
+//     publisher_name: "SMRG",
+//   },
+//   {
+//     id: 2,
+//     title: "Innovations in Intelligent Medicine and Healthcare Systems",
+//     slug: "innovations-in-intelligent-medicine-and-healthcare-systems",
+//     image: "https://smrg.arditsonline.com/public/admin/Journal_Images/4531768295389.jpeg",
+//     publisher_name: "SMRG",
+//   },
+//   {
+//     id: 3,
+//     title: "Neurology and Behavioral Science: A Neuropsychiatry Journal",
+//     slug: "neurology-and-behavioral-science-a-neuropsychiatry-journal",
+//     image: "https://smrg.arditsonline.com/public/admin/Journal_Images/6391767783859.jpeg",
+//     publisher_name: "SMRG",
+//   },
+// ];
