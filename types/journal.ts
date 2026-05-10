@@ -4,6 +4,8 @@ export type Journal = {
   slug: string;
   image: string;
   publisher_name: string;
+  featured: boolean;
+  has_editorial_board: boolean;
 };
 
 export type JournalsApiResponse = {

@@ -19,11 +19,17 @@ export default function Navbar() {
   
   const [journals, setJournals] = useState<Journal[]>([]);
   
-  useEffect(() => {
-    fetchAllJournals().then(data => {
-      setJournals(Array.isArray(data) ? data : data.data); // Handle both array and { data: [...] } formats
-    });
-  }, []);
+  // useEffect(() => {
+  //   fetchAllJournals().then(data => {
+  //     if (Array.isArray(data)) {
+  //     setJournals(data);
+  //   } else if (data && Array.isArray(data.data)) {
+  //     setJournals(data.data);
+  //   } else {
+  //     setJournals([]); // fallback to empty array
+  //   }
+  //     });
+  // }, []);
 
 
   const closeMobileMenu = () => {
@@ -63,11 +69,23 @@ export default function Navbar() {
     <div key={item.label} className="nav-item-wrap">
       <Link href={item.href} className="nav-link">{item.label}</Link>
       <div className="nav-dropdown">
-        {Array.isArray(journals) && journals.map((journal) => (
+
+        <Link href="/journals" className="nav-dropdown-link" style={{ fontWeight: "bold" }}>
+          All Journals
+        </Link>
+        <Link href="/journals/featured" className="nav-dropdown-link">
+          Featured Journals
+        </Link>
+        <Link href="/journals/established" className="nav-dropdown-link">
+          Established Journals
+        </Link>
+
+
+        {/* {Array.isArray(journals) && journals.map((journal) => (
           <Link key={journal.id} href={`/journal/${journal.slug}`} className="nav-dropdown-link">
             {journal.title}
           </Link>
-        ))}
+        ))} */}
       </div>
     </div>
   ) : (
