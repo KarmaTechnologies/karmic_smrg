@@ -1,37 +1,36 @@
 import Container from "@/components/layout/Container";
 
-export default function ServicesAcademicWritingSupportPage() {
+export default function ServicesVideoProductionPage() {
   return (
     <section className="page-section guideline-page">
       <Container>
         <div className="guideline-header">
-          <p className="guideline-kicker">Academic Writing Support</p>
-          <h1 className="title guideline-title">Academic Writing Support</h1>
+          <p className="guideline-kicker">Video Production</p>
+          <h1 className="title guideline-title">Research Video Production</h1>
           <p className="subtitle guideline-lead">
-            Provides structured writing assistance to authors preparing scholarly manuscripts and research content.
+            Supports the creation of research videos, interviews, and visual narratives.
           </p>
         </div>
 
         <div className="guideline-section">
           <h2 className="guideline-section-title">Description</h2>
           <p className="guideline-text">
-            This service helps improve clarity, structure, language quality, and formatting of research content.
+            Helps transform research into engaging visual formats for better communication.
           </p>
         </div>
 
         <div className="guideline-section">
           <h2 className="guideline-section-title">Scope</h2>
           <ul className="guideline-list">
-            <li>Manuscript drafting and editing</li>
-            <li>Content structuring</li>
-            <li>Language enhancement</li>
-            <li>Formatting and referencing</li>
+            <li>Video recording</li>
+            <li>Editing and post-production</li>
+            <li>Script-based content development</li>
           </ul>
         </div>
 
         <div className="guideline-section" style={{ textAlign: "center" }}>
           <button type="button" className="btn btn-primary">
-            Contact for Support
+            Contact for Production
           </button>
         </div>
       </Container>

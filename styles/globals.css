@@ -164,6 +164,10 @@ a {
 .input-field {
   border: 1px solid var(--border);
   border-radius: 10px;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   padding: clamp(0.6rem, 2vw, 0.7rem) clamp(0.7rem, 2vw, 0.8rem);
   font-size: clamp(0.9rem, 1vw, 0.96rem);
   outline: none;
@@ -667,6 +671,15 @@ a {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.submission-form-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 100%;
+}
+
+.submission-form-grid > * {
+  min-width: 0;
+}
+
 .contact-textarea {
   display: grid;
   gap: 0.45rem;
@@ -681,6 +694,9 @@ a {
 .contact-textarea textarea {
   border: 1px solid var(--border);
   border-radius: 12px;
+  display: block;
+  width: 100%;
+  max-width: 100%;
   padding: 0.85rem 0.95rem;
   font-size: 0.95rem;
   resize: vertical;
@@ -792,6 +808,10 @@ a {
   }
 
   .contact-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .submission-form-grid {
     grid-template-columns: 1fr;
   }
 

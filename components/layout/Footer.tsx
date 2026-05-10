@@ -9,7 +9,7 @@ export default function Footer() {
           <div>
             <h3 className="site-footer-brand">SMRG Publications</h3>
             <p className="site-footer-copy">
-              Advancing global research publishing through accessible, quality-first platforms.
+              Content processing and participation fees support editorial workflows, contributor recognition, technical infrastructure, and platform sustainability.
             </p>
           </div>
 
