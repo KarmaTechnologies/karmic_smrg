@@ -100,6 +100,18 @@ export async function fetchFeaturedJournals(): Promise<Journal[]> {
   return (data?.sections?.featured_journals ?? []).map(mapJournalImage);
 }
 
+export async function fetchEstablishedJournals(): Promise<Journal[]> {
+  const res = await fetch("https://smrg.arditsonline.com/api/home-journals.json", { cache: "no-store" });
+  if (!res.ok) throw new Error("Failed to fetch established journals");
+  const data = await res.json();
+
+  const journals = data?.sections?.established_journals ?? [];
+  return journals
+    .filter((journal: Journal) => journal.has_editorial_board === true)
+    .map(mapJournalImage);
+}
+
+
 
 // export async function fetchAllJournals() {
 //   const res = await fetch("https://smrg.arditsonline.com/api/home-journals", { cache: "no-store" });

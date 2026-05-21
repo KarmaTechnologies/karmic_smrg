@@ -1,19 +1,28 @@
-import { fetchAllJournals } from "@/lib/api";
+import Container from "@/components/layout/Container";
 import JournalCard from "@/components/cards/JournalCard";
+import { fetchEstablishedJournals } from "@/lib/api";
 
 export default async function EstablishedJournalsPage() {
-  const journals = await fetchAllJournals();
-  // Filter for has_editorial_board === true
-  const establishedJournals = journals.filter(j => j.has_editorial_board === true);
+  const journals = await fetchEstablishedJournals();
 
   return (
-    <div>
-      <h1>Established Journals</h1>
-      <div>
-        {establishedJournals.map(journal => (
-          <JournalCard key={journal.id} journal={journal} />
-        ))}
-      </div>
-    </div>
+    <section className="page-section">
+      <Container>
+        <h1 className="title">Established Journals</h1>
+        <p className="subtitle">Browse all established journals.</p>
+
+        {journals.length === 0 ? (
+          <div className="card" style={{ marginTop: "1rem", padding: "1rem" }}>
+            <p style={{ color: "var(--muted)" }}>No established journals available right now.</p>
+          </div>
+        ) : (
+          <div className="journals-grid">
+            {journals.map((journal) => (
+              <JournalCard key={journal.id} journal={journal} />
+            ))}
+          </div>
+        )}
+      </Container>
+    </section>
   );
 }
