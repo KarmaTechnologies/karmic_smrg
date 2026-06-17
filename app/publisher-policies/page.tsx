@@ -60,7 +60,7 @@ export default function PublisherPoliciesPage() {
         <div className="guideline-section">
           <h2 className="guideline-section-title">Transparency and Communication</h2>
           <ul className="guideline-list">
-            <li>Science Media maintains clear, accessible policies on submission, peer review, fees, and appeals on the publisher's website.</li>
+            <li>Science Media maintains clear, accessible policies on submission, peer review, fees, and appeals on the publisher&apos;s website.</li>
             <li>We provide channels for authors, editors, and reviewers to raise concerns or complaints confidentially.</li>
             <li>We regularly update stakeholders about policy changes, publishing ethics, and best practices.</li>
           </ul>
@@ -146,7 +146,7 @@ export default function PublisherPoliciesPage() {
         <div className="guideline-section">
           <h2 className="guideline-section-title">Corrections, Retractions, and Expressions of Concern</h2>
           <ul className="guideline-list">
-            <li>Science Media follows COPE guidelines for handling corrections, retractions, and expressions of concern to maintain the scientific record's integrity.</li>
+            <li>Science Media follows COPE guidelines for handling corrections, retractions, and expressions of concern to maintain the scientific record&apos;s integrity.</li>
             <li>Errors identified post-publication are corrected promptly and transparently.</li>
             <li>Retractions are issued in cases of confirmed misconduct or unreliable findings.</li>
           </ul>
@@ -157,7 +157,7 @@ export default function PublisherPoliciesPage() {
           <ul className="guideline-list">
             <li>Science Media complies with relevant data protection regulations (for example, GDPR).</li>
             <li>Personal data collected during manuscript submission and peer review are handled securely and confidentially.</li>
-            <li>Users' data rights are respected, and privacy policies are clearly communicated.</li>
+            <li>Users&apos;s data rights are respected, and privacy policies are clearly communicated.</li>
           </ul>
         </div>
 

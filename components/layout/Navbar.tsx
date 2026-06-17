@@ -5,8 +5,6 @@ import { useState, useEffect } from "react";
 import Container from "./Container";
 import { primaryNav } from "@/lib/constants";
 import "./Navbar.css";
-import { fetchAllJournals } from "@/lib/api";
-import { Journal } from "@/types/journal";
 
 
 export default function Navbar() {
@@ -14,24 +12,9 @@ export default function Navbar() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
+    setIsMobileMenuOpen((current) => !current);
   };
   
-  const [journals, setJournals] = useState<Journal[]>([]);
-  
-  // useEffect(() => {
-  //   fetchAllJournals().then(data => {
-  //     if (Array.isArray(data)) {
-  //     setJournals(data);
-  //   } else if (data && Array.isArray(data.data)) {
-  //     setJournals(data.data);
-  //   } else {
-  //     setJournals([]); // fallback to empty array
-  //   }
-  //     });
-  // }, []);
-
-
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
     setOpenDropdown(null);
@@ -117,9 +100,12 @@ export default function Navbar() {
 
           {/* Mobile Menu Button */}
           <button
+            type="button"
             className={`nav-mobile-menu-btn ${isMobileMenuOpen ? 'active' : ''}`}
             onClick={toggleMobileMenu}
             aria-label="Toggle menu"
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-navigation-drawer"
           >
             <span className="bar1"></span>
             <span className="bar2"></span>
@@ -129,7 +115,7 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="nav-mobile-drawer">
+          <div id="mobile-navigation-drawer" className="nav-mobile-drawer">
             <div className="mobile-nav-content">
               {primaryNav.map((item) => (
                 <div key={item.href} className="mobile-nav-item-wrap">

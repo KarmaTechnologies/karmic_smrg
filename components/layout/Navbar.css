@@ -61,6 +61,15 @@
   position: relative;
 }
 
+.nav-item-wrap::before {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 0.6rem; /* slightly more than the gap */
+} 
+
 .nav-link {
   display: inline-flex;
   align-items: center;
@@ -155,6 +164,9 @@
   cursor: pointer;
   padding: 8px;
   flex-shrink: 0;
+  position: relative;
+  z-index: 110;
+  touch-action: manipulation;
 }
 
 .nav-mobile-menu-btn .bar1,
@@ -192,7 +204,7 @@
   border-bottom: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  z-index: 50;
+  z-index: 105;
   overflow-y: auto;
   animation: slideDown 0.3s ease;
 }
