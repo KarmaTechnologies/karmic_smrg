@@ -53,7 +53,7 @@ export default function Navbar() {
       <Link href={item.href} className="nav-link">{item.label}</Link>
       <div className="nav-dropdown">
 
-        <Link href="/journals" className="nav-dropdown-link" style={{ fontWeight: "bold" }}>
+        <Link href="/journals/all" className="nav-dropdown-link" style={{ fontWeight: "bold" }}>
           All Journals
         </Link>
         <Link href="/journals/featured" className="nav-dropdown-link">

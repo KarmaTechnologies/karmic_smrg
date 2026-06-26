@@ -88,6 +88,7 @@ export const primaryNav: NavItem[] = [
     ],
   },
   { label: "Contact Us", href: "/contact" },
+  {label: "Processing Charges", href: "/processing-charges" },
 ];
 
 export const services = [

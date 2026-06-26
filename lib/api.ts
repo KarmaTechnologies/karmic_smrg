@@ -112,7 +112,6 @@ export async function fetchEstablishedJournals(): Promise<Journal[]> {
 }
 
 
-
 // export async function fetchAllJournals() {
 //   const res = await fetch("https://smrg.arditsonline.com/api/home-journals", { cache: "no-store" });
 //   if (!res.ok) throw new Error("Failed to fetch journals");
@@ -121,29 +120,51 @@ export async function fetchEstablishedJournals(): Promise<Journal[]> {
 //   return data.data; // <-- return the array
 // }
 
+
 export async function fetchAllJournals(): Promise<Journal[]> {
   try {
-    const res = await fetch("https://smrg.arditsonline.com/api/home-journals.json", { cache: "no-store" });
-    console.log("API status:", res.status, res.statusText);
-    if (!res.ok) {
-      const text = await res.text();
-      console.error("API error response:", text);
-      throw new Error("Failed to fetch journals");
-    }
+    const res = await fetch("https://smrg.arditsonline.com/api/home-journals.json", {
+      cache: "no-store",
+    });
+
+    if (!res.ok) throw new Error("Failed to fetch journals");
+
     const data = await res.json();
+    const featured = data?.sections?.featured_journals ?? [];
+    const established = data?.sections?.established_journals ?? [];
 
-    let journals: Journal[] = [];
-    if (Array.isArray(data)) {
-      journals = data;
-    } else if (data && Array.isArray(data.data)) {
-      journals = data.data;
-    } else {
-      journals = [];
+    const allJournals = [...featured, ...established];
+
+    return allJournals.map(mapJournalImage);
+  } catch {
+    return [];
+  }
+}
+
+
+//journal-detail page api call
+export async function getJournalDetails(slug: string): Promise<Journal | null> {
+  try {
+    const res = await fetch("https://smrg.arditsonline.com/public/api/journal-details", {
+      next: { revalidate: 900 },
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    const journal = json?.data?.find((j: Journal) => j.slug === slug) ?? null;
+
+
+    // Fix broken banner_image_url (double /public/public/)
+    if (journal?.banner_image_url) {
+      journal.banner_image_url = journal.banner_image_url.replace(
+        "/public/public/",
+        "/public/"
+      );
     }
 
-    return journals.map(mapJournalImage);
-  } catch (error) {
-    console.error("Network or fetch error:", error);
-    return [];
+
+    
+    return journal;
+  } catch {
+    return null;
   }
 }
