@@ -2,7 +2,7 @@ export default function OpenAccessPage() {
   return (
     <section className="page-section about-hero-section">
       <div className="container">
-        <div className="about-content">
+        <div className="about-content about-content-stacked">
           <div className="about-image-wrap">
             <img
               src="/images/about/about-us-hero.jpg"
@@ -12,7 +12,6 @@ export default function OpenAccessPage() {
           </div>
 
           <div className="about-text-card">
-            <span className="about-label">OPEN ACCESS</span>
             <h1 className="about-heading">Open Access</h1>
             <p className="about-paragraph">
               Open access (OA) is the free and unlimited access to digital content, including text, data, software, audio, video, and multimedia. It includes non-scholarly content like music, movies, and novels. To be OA, a publication must be accessible via the internet or other means.

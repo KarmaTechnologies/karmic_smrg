@@ -10,3 +10,4 @@ export default function DashboardCard({ title, value }: { title: string; value: 
     </Card>
   );
 }
+

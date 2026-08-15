@@ -89,11 +89,8 @@ export default function Navbar() {
             </div>
 
             <div className="nav-auth-buttons">
-              <Link href="/login" className="btn btn-outline">
-                Login
-              </Link>
-              <Link href="/register" className="btn btn-primary">
-                Sign Up
+              <Link href="/login" className="btn btn-primary">
+                Login / Sign Up
               </Link>
             </div>
           </div>
@@ -154,11 +151,8 @@ export default function Navbar() {
 
             {/* Mobile Auth Buttons */}
             <div className="mobile-auth-stack">
-              <Link href="/login" className="btn btn-outline full-w" onClick={closeMobileMenu}>
-                Login
-              </Link>
-              <Link href="/register" className="btn btn-primary full-w" onClick={closeMobileMenu}>
-                Sign Up
+              <Link href="/login" className="btn btn-primary full-w" onClick={closeMobileMenu}>
+                Login / Sign Up
               </Link>
             </div>
           </div>
