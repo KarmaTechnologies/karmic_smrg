@@ -1,3 +1,16 @@
+export type Article = {
+  id: number;
+  title: string;
+  abstract?: string;
+  article_type?: string;
+  publication_status?: string;
+  publication_date?: string;
+  volume?: string;
+  issue?: string;
+  authors?: string[];
+  media?: { url: string; label: string }[];
+};
+
 export type Journal = {
   id: number;
   title: string;
@@ -13,7 +26,7 @@ export type Journal = {
   banner_image_url?: string;
   introduction?: string | null;
   aims_scope?: string | null;
-  
+  allArticles?: Article[];
 };
 
 export type JournalsApiResponse = {

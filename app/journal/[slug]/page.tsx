@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Container from "@/components/layout/Container";
 import { getJournalDetails } from "@/lib/api";
+import JournalSidebar from "@/components/journal/JournalSidebar";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -14,6 +15,16 @@ export default async function JournalDetailPage({ params }: Props) {
   if (!journal) {
     notFound();
   }
+
+  const tabs = [];
+  if (journal.introduction) {
+    tabs.push({ id: "introduction", label: "Introduction", content: journal.introduction });
+  }
+  if (journal.aims_scope) {
+    tabs.push({ id: "aims-scope", label: "Aims & Scope", content: journal.aims_scope });
+  }
+
+  const hasArticles = journal.allArticles && journal.allArticles.length > 0;
 
   return (
     <>
@@ -29,32 +40,10 @@ export default async function JournalDetailPage({ params }: Props) {
         />
       </section>
 
-      {journal.introduction && (
+      {(tabs.length > 0 || hasArticles) && (
         <section className="page-section">
           <Container>
-            <div style={{ maxWidth: 800, margin: "0 auto" }}>
-              <h2 className="title" style={{ marginBottom: "1rem" }}>Introduction</h2>
-              {journal.introduction.split("\n\n").map((para, i) => (
-                <p key={i} style={{ color: "var(--muted)", lineHeight: 1.8, marginTop: i > 0 ? "1rem" : 0 }}>
-                  {para}
-                </p>
-              ))}
-            </div>
-          </Container>
-        </section>
-      )}
-
-      {journal.aims_scope && (
-        <section className="page-section" style={{ background: "#f5f8ff" }}>
-          <Container>
-            <div style={{ maxWidth: 800, margin: "0 auto" }}>
-              <h2 className="title" style={{ marginBottom: "1rem" }}>Aims & Scope</h2>
-              {journal.aims_scope.split("\n\n").map((para, i) => (
-                <p key={i} style={{ color: "var(--muted)", lineHeight: 1.8, marginTop: i > 0 ? "1rem" : 0 }}>
-                  {para}
-                </p>
-              ))}
-            </div>
+            <JournalSidebar tabs={tabs} articles={journal.allArticles} />
           </Container>
         </section>
       )}
