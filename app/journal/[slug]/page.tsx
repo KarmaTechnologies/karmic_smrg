@@ -43,7 +43,7 @@ export default async function JournalDetailPage({ params }: Props) {
       {(tabs.length > 0 || hasArticles) && (
         <section className="page-section">
           <Container>
-            <JournalSidebar tabs={tabs} articles={journal.allArticles} />
+            <JournalSidebar tabs={tabs} articles={journal.allArticles} journalSlug={slug} />
           </Container>
         </section>
       )}

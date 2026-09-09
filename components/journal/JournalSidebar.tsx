@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Article } from "@/types/journal";
 
 type Tab = {
@@ -12,9 +13,11 @@ type Tab = {
 export default function JournalSidebar({
   tabs,
   articles,
+  journalSlug,
 }: {
   tabs: Tab[];
   articles?: Article[];
+  journalSlug: string;
 }) {
   const allTabs = [...tabs];
   if (articles && articles.length > 0) {
@@ -37,6 +40,20 @@ export default function JournalSidebar({
           </button>
         ))}
       </aside>
+
+      <div className="journal-sidebar-dropdown-wrap">
+        <select
+          className="journal-sidebar-dropdown"
+          value={active}
+          onChange={(e) => setActive(e.target.value)}
+        >
+          {allTabs.map((tab) => (
+            <option key={tab.id} value={tab.id}>
+              {tab.label}
+            </option>
+          ))}
+        </select>
+      </div>
 
       <div className="journal-sidebar-content">
         {activeTab?.id === "articles" ? (
@@ -91,21 +108,24 @@ export default function JournalSidebar({
                         );
                       })()}
                   </div>
-                  {article.media && article.media.length > 0 && (
-                    <div className="journal-article-media">
-                      {article.media.map((m, i) => (
-                        <a
-                          key={i}
-                          href={`https://smrg.arditsonline.com/public/public/${m.url}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="btn btn-outline btn-sm"
-                        >
-                          {m.label}
-                        </a>
-                      ))}
-                    </div>
-                  )}
+                  <div className="journal-article-actions">
+                    <Link
+                      href={`/journal/${journalSlug}/article/${article.id}`}
+                      className="btn btn-primary btn-sm"
+                    >
+                      View Details
+                    </Link>
+                    {article.media && article.media.length > 0 && (
+                      <a
+                        href={`https://smrg.arditsonline.com/public/public/${article.media[0].url}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-outline btn-sm"
+                      >
+                        {article.media[0].label}
+                      </a>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>

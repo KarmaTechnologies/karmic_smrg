@@ -168,3 +168,53 @@ export async function getJournalDetails(slug: string): Promise<Journal | null> {
     return null;
   }
 }
+
+// Article detail API
+export type ArticleDetailResponse = {
+  journal: {
+    id: number;
+    name: string;
+    slug: string;
+    about_sections: { key: string; title: string }[];
+  };
+  article: {
+    id: number;
+    publication_uid: string;
+    title: string;
+    doi: string;
+    publication_date: string;
+    article_type: string;
+    journal: string;
+    volume: string;
+    issue: string;
+    publication_status: string;
+    authors: {
+      display_name: string;
+      affiliation: string;
+      contribution_role: string;
+    }[];
+    keywords: string[];
+    sections: { title: string; content: string }[];
+    media: { url: string; label: string }[];
+    references: string[];
+    citations: { citation_count: number };
+    visitor_stats: { views: number; downloads: number };
+  };
+};
+
+export async function getArticleDetail(
+  journalSlug: string,
+  articleId: string
+): Promise<ArticleDetailResponse | null> {
+  try {
+    const res = await fetch(
+      `https://smrg.arditsonline.com/public/api/journals/${journalSlug}/article/${articleId}`,
+      { next: { revalidate: 900 } }
+    );
+    if (!res.ok) return null;
+    const json = await res.json();
+    return json?.data ?? null;
+  } catch {
+    return null;
+  }
+}
