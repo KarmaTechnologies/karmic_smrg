@@ -218,3 +218,23 @@ export async function getArticleDetail(
     return null;
   }
 }
+
+// Article sections API
+export type ArticleSection = {
+  title: string;
+  content: string;
+};
+
+export async function getArticleSections(): Promise<ArticleSection[]> {
+  try {
+    const res = await fetch(
+      "https://smrg.arditsonline.com/public/api/sample/article-sections",
+      { next: { revalidate: 900 } }
+    );
+    if (!res.ok) return [];
+    const json = await res.json();
+    return json?.data ?? [];
+  } catch {
+    return [];
+  }
+}

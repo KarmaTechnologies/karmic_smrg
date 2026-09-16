@@ -2,22 +2,41 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import Container from "@/components/layout/Container";
-import { getJournalDetails, getArticleDetail } from "@/lib/api";
+import { getJournalDetails, getArticleDetail, getArticleSections } from "@/lib/api";
 
 type Props = {
   params: Promise<{ slug: string; articleId: string }>;
 };
 
+function detectSubheading(text: string): { subheading: string; rest: string } | null {
+  const patterns = [
+    /^([A-Z][^:.\n]{2,50}):\s+(.+)/,
+    /^([A-Z][^:.\n]{2,50})\.\s+(.+)/,
+  ];
+
+  for (const pattern of patterns) {
+    const match = text.match(pattern);
+    if (match) {
+      return { subheading: match[1].trim(), rest: match[2].trim() };
+    }
+  }
+  return null;
+}
+
 export default async function ArticleDetailPage({ params }: Props) {
   const { slug, articleId } = await params;
   const journal = await getJournalDetails(slug);
   const articleData = await getArticleDetail(slug, articleId);
+  const articleSections = await getArticleSections();
 
   if (!journal || !articleData) {
     notFound();
   }
 
   const { article } = articleData;
+
+  const abstractSection = articleSections.find((s) => s.title === "Abstract");
+  const otherSections = articleSections.filter((s) => s.title !== "Abstract");
 
   return (
     <>
@@ -128,29 +147,36 @@ export default async function ArticleDetailPage({ params }: Props) {
                 </div>
               )}
 
-              {article.sections && article.sections.length > 0 && (
-                <>
-                  {article.sections.map((section, i) => (
-                    <div key={i} className="article-detail-block">
-                      <h2 className="article-detail-block-title">{section.title}</h2>
-                      <p className="article-detail-text">{section.content}</p>
-                    </div>
-                  ))}
-                </>
-              )}
-
-              {article.references && article.references.length > 0 && (
+              {abstractSection && (
                 <div className="article-detail-block">
-                  <h2 className="article-detail-block-title">References</h2>
-                  <ol className="article-reference-list">
-                    {article.references.map((ref, i) => (
-                      <li key={i} className="article-reference-item">
-                        {ref}
-                      </li>
-                    ))}
-                  </ol>
+                  <h2 className="article-detail-block-title">Abstract</h2>
+                  <p className="article-detail-text">{abstractSection.content}</p>
                 </div>
               )}
+
+              {otherSections.map((section, i) => (
+                <div key={i} className="article-detail-block">
+                  <h2 className="article-detail-block-title">{section.title}</h2>
+                  <div className="article-detail-text">
+                    {section.content.split("\n\n").map((para, j) => {
+                      const result = detectSubheading(para);
+                      if (result) {
+                        return (
+                          <div key={j} style={{ marginBottom: j > 0 ? "1rem" : 0 }}>
+                            <h3 className="article-subheading">{result.subheading}</h3>
+                            <p>{result.rest}</p>
+                          </div>
+                        );
+                      }
+                      return (
+                        <p key={j} style={{ marginBottom: j > 0 ? "1rem" : 0 }}>
+                          {para}
+                        </p>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
             </div>
 
             <aside className="article-detail-sidebar">
