@@ -37,13 +37,6 @@ export default function ExploreArticlesPage() {
           </p>
         </div>
 
-        <div className="guideline-section">
-          <h2 className="guideline-section-title">Processing Fee</h2>
-          <p className="guideline-text">
-            Standard Article Processing Charge (APC): USD 5 / EUR 5
-          </p>
-        </div>
-
         <div className="guideline-section" style={{ textAlign: "center" }}>
           <Link href="/submission/article" className="btn btn-primary">
             Submit Article

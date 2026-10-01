@@ -221,16 +221,8 @@ export default function ExploreVideosPage() {
           </ul>
         </div>
 
-        {/* Fee */}
         <div className="hypothesis-section">
-          <h2 className="hypothesis-section-title">Processing & Participation</h2>
-          <p className="hypothesis-text">
-            <strong>Unhosted Interview:</strong> USD 6 / EUR 5
-          </p>
-          <p className="hypothesis-text" style={{ marginTop: "0.3rem" }}>
-            <strong>Hosted Interview:</strong> USD 10 / EUR 9
-          </p>
-          <p className="hypothesis-text" style={{ marginTop: "0.8rem" }}>Optional:</p>
+          <h2 className="hypothesis-section-title">Optional Production Support</h2>
           <ul className="hypothesis-list">
             <li>Host engagement</li>
             <li>Video editing</li>

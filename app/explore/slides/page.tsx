@@ -26,11 +26,6 @@ export default function ExploreSlidesPage() {
           </p>
         </div>
 
-        <div className="guideline-section">
-          <h2 className="guideline-section-title">Processing Fee</h2>
-          <p className="guideline-text">USD 5 / EUR 5</p>
-        </div>
-
         <div className="guideline-section" style={{ textAlign: "center" }}>
           <button type="button" className="btn btn-primary">
             Submit Presentation

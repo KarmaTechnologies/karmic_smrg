@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Article } from "@/types/journal";
+import { Article, Keyword, PersonMember } from "@/types/journal";
 
 type Tab = {
   id: string;
@@ -10,19 +10,50 @@ type Tab = {
   content?: string;
 };
 
+function keywordLabel(k: Keyword): string {
+  if (typeof k === "string") return k;
+  return k.keyword || k.name || k.title || "";
+}
+
+function personName(p: PersonMember): string {
+  return p.display_name || p.name || "";
+}
+
+function personRole(p: PersonMember): string {
+  return p.role || p.designation || "";
+}
+
+function highlightItems(h?: string | string[]): string[] {
+  if (!h) return [];
+  if (Array.isArray(h)) return h.map((s) => String(s).trim()).filter(Boolean);
+  return h
+    .split(/\r?\n/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
 export default function JournalSidebar({
   tabs,
   articles,
   journalSlug,
+  keywords = [],
+  peopleMembers = [],
+  highlights,
 }: {
   tabs: Tab[];
   articles?: Article[];
   journalSlug: string;
+  keywords?: Keyword[];
+  peopleMembers?: PersonMember[];
+  highlights?: string | string[];
 }) {
   const allTabs = [...tabs];
-  if (articles && articles.length > 0) {
-    allTabs.push({ id: "articles", label: "Articles" });
-  }
+  allTabs.push({ id: "highlights", label: "Highlights" });
+  allTabs.push({ id: "articles", label: "Articles" });
+  allTabs.push({ id: "keywords", label: "Keywords" });
+  allTabs.push({ id: "people-members", label: "People and Members" });
+
+  const highlightList = highlightItems(highlights);
 
   const [active, setActive] = useState(allTabs[0]?.id || "");
   const activeTab = allTabs.find((t) => t.id === active);
@@ -56,13 +87,31 @@ export default function JournalSidebar({
       </div>
 
       <div className="journal-sidebar-content">
-        {activeTab?.id === "articles" ? (
+        {activeTab?.id === "highlights" ? (
+          <div>
+            <h2 className="title" style={{ marginBottom: "1rem" }}>
+              Highlights
+            </h2>
+            {highlightList.length > 0 ? (
+              <ul className="journal-highlights-list">
+                {highlightList.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
+              </ul>
+            ) : (
+              <p>No highlights available yet.</p>
+            )}
+          </div>
+        ) : activeTab?.id === "articles" ? (
           <div>
             <h2 className="title" style={{ marginBottom: "1rem" }}>
               Articles
             </h2>
+            {!articles || articles.length === 0 ? (
+              <p>No articles available yet.</p>
+            ) : (
             <div className="journal-articles-scroll">
-              {articles!.map((article) => (
+              {articles.map((article) => (
                 <div key={article.id} className="journal-article-card">
                   <h3 className="journal-article-title">{article.title}</h3>
                   {article.authors && article.authors.length > 0 && (
@@ -129,6 +178,56 @@ export default function JournalSidebar({
                 </div>
               ))}
             </div>
+            )}
+          </div>
+        ) : activeTab?.id === "keywords" ? (
+          <div>
+            <h2 className="title" style={{ marginBottom: "1rem" }}>
+              Keywords
+            </h2>
+            {keywords.length > 0 ? (
+              <div className="article-keyword-list">
+                {keywords.map((kw, i) => {
+                  const label = keywordLabel(kw);
+                  return label ? (
+                    <span key={i} className="article-keyword-tag">
+                      {label}
+                    </span>
+                  ) : null;
+                })}
+              </div>
+            ) : (
+              <p>No keywords available yet.</p>
+            )}
+          </div>
+        ) : activeTab?.id === "people-members" ? (
+          <div>
+            <h2 className="title" style={{ marginBottom: "1rem" }}>
+              People and Members
+            </h2>
+            {peopleMembers.length > 0 ? (
+              <div className="journal-people-list">
+                {peopleMembers.map((person, i) => (
+                  <div key={i} className="journal-person-card">
+                    <span className="journal-person-avatar">
+                      {(personName(person) || "?").charAt(0).toUpperCase()}
+                    </span>
+                    <div className="journal-person-info">
+                      <span className="journal-person-name">
+                        {personName(person) || "—"}
+                      </span>
+                      {personRole(person) && (
+                        <span className="journal-person-role">
+                          {personRole(person)}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p>No people and members available yet.</p>
+            )}
           </div>
         ) : (
           activeTab?.content && (

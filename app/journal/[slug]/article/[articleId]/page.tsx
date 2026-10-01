@@ -8,6 +8,28 @@ type Props = {
   params: Promise<{ slug: string; articleId: string }>;
 };
 
+const articleNavigationSections = [
+  { id: "abstract", label: "Abstract" },
+  { id: "introduction", label: "Introduction" },
+  { id: "methods", label: "Methods" },
+  { id: "results", label: "Results" },
+  { id: "discussion", label: "Discussion" },
+  { id: "references", label: "References" },
+];
+
+function articleSectionId(title: string): string {
+  const normalizedTitle = title.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+  const aliases: Record<string, string> = {
+    method: "methods",
+    methodology: "methods",
+    "materials and methods": "methods",
+    "material and methods": "methods",
+    result: "results",
+  };
+  const sectionId = aliases[normalizedTitle] ?? normalizedTitle.replace(/\s+/g, "-");
+  return `article-section-${sectionId}`;
+}
+
 function detectSubheading(text: string): { subheading: string; rest: string } | null {
   const patterns = [
     /^([A-Z][^:.\n]{2,50}):\s+(.+)/,
@@ -27,16 +49,21 @@ export default async function ArticleDetailPage({ params }: Props) {
   const { slug, articleId } = await params;
   const journal = await getJournalDetails(slug);
   const articleData = await getArticleDetail(slug, articleId);
-  const articleSections = await getArticleSections();
 
   if (!journal || !articleData) {
     notFound();
   }
 
   const { article } = articleData;
+  const articleSections = article.sections?.length
+    ? article.sections
+    : await getArticleSections();
 
   const abstractSection = articleSections.find((s) => s.title === "Abstract");
   const otherSections = articleSections.filter((s) => s.title !== "Abstract");
+  const hasReferencesSection = otherSections.some((section) =>
+    section.title.toLowerCase().includes("reference")
+  );
 
   return (
     <>
@@ -62,6 +89,15 @@ export default async function ArticleDetailPage({ params }: Props) {
           </Link>
 
           <div className="article-detail-container">
+            <nav className="article-section-nav" aria-label="Article sections">
+              <h2 className="article-section-nav-title">On this page</h2>
+              {articleNavigationSections.map((section) => (
+                <a key={section.id} href={`#article-section-${section.id}`}>
+                  {section.label}
+                </a>
+              ))}
+            </nav>
+
             <div className="article-detail-main">
               <div className="article-detail-header">
                 <span className="article-detail-type">{article.article_type}</span>
@@ -148,14 +184,14 @@ export default async function ArticleDetailPage({ params }: Props) {
               )}
 
               {abstractSection && (
-                <div className="article-detail-block">
+                <section id={articleSectionId(abstractSection.title)} className="article-detail-block">
                   <h2 className="article-detail-block-title">Abstract</h2>
                   <p className="article-detail-text">{abstractSection.content}</p>
-                </div>
+                </section>
               )}
 
-              {otherSections.map((section, i) => (
-                <div key={i} className="article-detail-block">
+              {otherSections.map((section) => (
+                <section key={section.title} id={articleSectionId(section.title)} className="article-detail-block">
                   <h2 className="article-detail-block-title">{section.title}</h2>
                   <div className="article-detail-text">
                     {section.content.split("\n\n").map((para, j) => {
@@ -175,8 +211,19 @@ export default async function ArticleDetailPage({ params }: Props) {
                       );
                     })}
                   </div>
-                </div>
+                </section>
               ))}
+
+              {!hasReferencesSection && article.references?.length ? (
+                <section id="article-section-references" className="article-detail-block">
+                  <h2 className="article-detail-block-title">References</h2>
+                  <ol className="article-reference-list">
+                    {article.references.map((reference, index) => (
+                      <li key={index} className="article-reference-item">{reference}</li>
+                    ))}
+                  </ol>
+                </section>
+              ) : null}
             </div>
 
             <aside className="article-detail-sidebar">

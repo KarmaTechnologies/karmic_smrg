@@ -118,13 +118,8 @@ export default function ExploreHypothesesPage() {
           </ul>
         </div>
 
-        {/* Fee */}
         <div className="hypothesis-section">
-          <h2 className="hypothesis-section-title">Processing & Participation</h2>
-          <p className="hypothesis-text">
-            <strong>Exploratory Hypothesis Processing Fee:</strong> USD 5 / EUR 5
-          </p>
-          <p className="hypothesis-text" style={{ marginTop: "0.5rem" }}>Optional:</p>
+          <h2 className="hypothesis-section-title">Optional Support</h2>
           <ul className="hypothesis-list">
             <li>Academic writing refinement</li>
             <li>Visual explanation / diagrams</li>

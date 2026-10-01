@@ -169,7 +169,6 @@ export default function GuidelineEditorPage() {
 
           <h3 className="guideline-subtitle">Publishing and Research Benefits</h3>
           <ul className="guideline-list">
-            <li>Discounts and waivers: Enjoy reduced or waived Article Processing Charges (APCs) for your own submissions to the journal or affiliated publications.</li>
             <li>Priority consideration: Benefit from expedited handling of manuscripts you submit.</li>
             <li>Access to content: Receive complimentary or discounted subscriptions to the journal and related publications.</li>
           </ul>

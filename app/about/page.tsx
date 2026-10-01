@@ -4,7 +4,7 @@ export default function AboutPage() {
   return (
     <section className="page-section about-hero-section">
       <Container>
-        <div className="about-content">
+        <div className="about-content about-content-stacked">
           <div className="about-image-wrap">
             <img
               src="/images/about/about-us-hero.jpg"

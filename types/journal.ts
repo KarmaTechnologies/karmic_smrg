@@ -11,6 +11,15 @@ export type Article = {
   media?: { url: string; label: string }[];
 };
 
+export type Keyword = string | { keyword?: string; name?: string; title?: string };
+
+export type PersonMember = {
+  display_name?: string;
+  name?: string;
+  role?: string;
+  designation?: string;
+};
+
 export type Journal = {
   id: number;
   title: string;
@@ -26,7 +35,10 @@ export type Journal = {
   banner_image_url?: string;
   introduction?: string | null;
   aims_scope?: string | null;
+  highlights?: string | string[];
   allArticles?: Article[];
+  keywords?: Keyword[];
+  people_members?: PersonMember[];
 };
 
 export type JournalsApiResponse = {

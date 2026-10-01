@@ -129,7 +129,7 @@ export default function PublisherPoliciesPage() {
           <h2 className="guideline-section-title">Open Access and Copyright Policy</h2>
           <ul className="guideline-list">
             <li>Science Media supports a range of open access publishing models.</li>
-            <li>Science Media provides clear information on article processing charges (APCs), licenses (for example, Creative Commons), and copyright ownership.</li>
+            <li>Science Media provides clear information on licenses (for example, Creative Commons) and copyright ownership.</li>
             <li>Authors retain copyright or grant necessary licenses according to journal policies.</li>
           </ul>
         </div>

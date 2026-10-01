@@ -15,7 +15,7 @@ export default function ServicesMembershipPage() {
         <div className="guideline-section">
           <h2 className="guideline-section-title">Membership Services - Unlock Unlimited Publishing Opportunities</h2>
           <p className="guideline-text">
-            The Science Media Research Group encourages and supports authors through our exclusive Membership Services - the perfect solution for researchers planning to publish multiple articles annually. By becoming a member, you can publish an unlimited number of articles throughout the year without paying Article Processing Charges (APCs) for each submission.
+            The Science Media Research Group encourages and supports authors through our exclusive Membership Services - the perfect solution for researchers planning to publish multiple articles annually. By becoming a member, you can publish an unlimited number of articles throughout the year.
           </p>
         </div>
 
@@ -47,7 +47,7 @@ export default function ServicesMembershipPage() {
             By joining The Science Media Research Group as an Individual, Institutional, or corporate member, you can enjoy the following advantages:
           </p>
           <ul className="guideline-list">
-            <li>Unlimited Publications: Publish an unlimited number of articles in various The Science Media Research Group journals within the membership period without paying publication fees (Article Processing Charges) for each article.</li>
+            <li>Unlimited Publications: Publish an unlimited number of articles in various The Science Media Research Group journals within the membership period.</li>
             <li>Conference Discounts: Individual members receive a 15% discount on registration fees for The Science Media Research Group-associated conferences.</li>
             <li>Broad Exposure: Benefit from our extensive global platform to promote your research across multiple scientific disciplines.</li>
             <li>Support and Resources: Access dedicated support for manuscript submission, peer review, and publishing.</li>

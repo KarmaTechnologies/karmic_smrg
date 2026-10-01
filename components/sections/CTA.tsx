@@ -10,7 +10,7 @@ export default function CTA() {
             <h3 style={{ fontSize: "1.4rem" }}>Ready to submit your research?</h3>
             <p className="subtitle">Start your submission in a few simple steps.</p>
           </div>
-          <Link href="/submission" className="btn btn-primary">
+          <Link href="/submission/article" className="btn btn-primary">
             Submit Research
           </Link>
         </div>

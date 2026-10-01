@@ -21,7 +21,7 @@ export default function Navbar() {
   };
 
   const handleDropdownClick = (href: string) => {
-    setOpenDropdown(openDropdown === href ? null : href);
+    setOpenDropdown((current) => current === href ? null : href);
   };
 
   useEffect(() => {
@@ -47,45 +47,37 @@ export default function Navbar() {
           {/* Desktop Navigation */}
           <div className="nav-desktop-section">
             <div className="nav-menu">
-              {primaryNav.map((item) =>
-  item.label === "Journals" ? (
-    <div key={item.label} className="nav-item-wrap">
-      <Link href={item.href} className="nav-link">{item.label}</Link>
-      <div className="nav-dropdown">
+              {primaryNav.map((item) => {
+                const dropdownId = `${item.href.replaceAll("/", "")}-dropdown`;
 
-        <Link href="/journals/all" className="nav-dropdown-link" style={{ fontWeight: "bold" }}>
-          All Journals
-        </Link>
-        <Link href="/journals/featured" className="nav-dropdown-link">
-          Featured Journals
-        </Link>
-        <Link href="/journals/established" className="nav-dropdown-link">
-          Established Journals
-        </Link>
-
-
-        {/* {Array.isArray(journals) && journals.map((journal) => (
-          <Link key={journal.id} href={`/journal/${journal.slug}`} className="nav-dropdown-link">
-            {journal.title}
-          </Link>
-        ))} */}
-      </div>
-    </div>
-  ) : (
-    <div key={item.href} className="nav-item-wrap">
-      <Link href={item.href} className="nav-link">{item.label}</Link>
-      {item.children && (
-        <div className="nav-dropdown">
-          {item.children.map((child) => (
-            <Link key={child.href} href={child.href} className="nav-dropdown-link">
-              {child.label}
-            </Link>
-          ))}
-        </div>
-      )}
-    </div>
-  )
-)}
+                return item.children?.length ? (
+                  <div
+                    key={item.href}
+                    className={`nav-item-wrap click-dropdown ${openDropdown === item.href ? "open" : ""}`}
+                  >
+                    <button
+                      type="button"
+                      className="nav-link nav-dropdown-toggle"
+                      onClick={() => handleDropdownClick(item.href)}
+                      aria-expanded={openDropdown === item.href}
+                      aria-controls={dropdownId}
+                    >
+                      {item.label}
+                    </button>
+                    <div id={dropdownId} className="nav-dropdown">
+                      {item.children.map((child) => (
+                        <Link key={child.href} href={child.href} className="nav-dropdown-link">
+                          {child.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div key={item.href} className="nav-item-wrap">
+                    <Link href={item.href} className="nav-link">{item.label}</Link>
+                  </div>
+                );
+              })}
             </div>
 
             <div className="nav-auth-buttons">

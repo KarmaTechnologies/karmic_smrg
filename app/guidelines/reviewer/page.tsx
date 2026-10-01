@@ -140,8 +140,7 @@ export default function GuidelineReviewerPage() {
 
           <h3 className="guideline-subtitle">Publishing Benefits</h3>
           <ul className="guideline-list">
-            <li>Priority consideration: Expedited review or waiver of Article Processing Charges (APCs) for reviewers who publish with us.</li>
-            <li>Discounts: Discounts on publication fees, conferences, and affiliated events.</li>
+            <li>Discounts: Discounts on conferences and affiliated events.</li>
           </ul>
 
           <h3 className="guideline-subtitle">Contribution to Science</h3>

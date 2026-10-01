@@ -8,7 +8,9 @@ export const primaryNav: NavItem[] = [
     label: "Journals",
     href: "/journals",
     children: [
-      
+      { label: "All Journals", href: "/journals/all" },
+      { label: "Featured Journals", href: "/journals/featured" },
+      { label: "Established Journals", href: "/journals/established" },
     ],
   },
 
@@ -88,7 +90,6 @@ export const primaryNav: NavItem[] = [
     ],
   },
   { label: "Contact Us", href: "/contact" },
-  {label: "Processing Charges", href: "/processing-charges" },
 ];
 
 export const services = [
