@@ -1,4 +1,5 @@
 import { JournalsApiResponse, Journal } from "@/types/journal";
+import { extractArticleHtml, slugify } from "@/lib/helpers";
 
 
 const DEFAULT_API_BASE = "https://smrg.arditsonline.com/api";
@@ -170,45 +171,55 @@ export async function getJournalDetails(slug: string): Promise<Journal | null> {
 }
 
 // Article detail API
+export type ArticleDetailSection = {
+  title: string;
+  display_order?: number;
+  url: string;
+  content?: string;
+};
+
 export type ArticleDetailResponse = {
   journal: {
     id: number;
     name: string;
     slug: string;
-    about_sections: { key: string; title: string }[];
+    about_sections?: { key: string; title: string }[];
   };
   article: {
     id: number;
-    publication_uid: string;
+    slug: string;
+    publication_uid?: string;
     title: string;
-    doi: string;
+    abstract?: string;
+    doi?: string | null;
     publication_date: string;
     article_type: string;
-    journal: string;
-    volume: string;
-    issue: string;
+    journal?: string;
+    volume?: string | null;
+    issue?: string | null;
     publication_status: string;
     authors: {
       display_name: string;
-      affiliation: string;
-      contribution_role: string;
+      affiliation?: string;
+      contribution_role?: string;
     }[];
     keywords: string[];
-    sections: { title: string; content: string }[];
+    sections: ArticleDetailSection[];
     media: { url: string; label: string }[];
-    references: string[];
-    citations: { citation_count: number };
-    visitor_stats: { views: number; downloads: number };
+    references?: string[];
+    citations?: { citation_count: number };
+    visitor_stats?: { views: number; downloads: number };
   };
 };
 
+// The article API is keyed by the article slug, not its numeric id.
 export async function getArticleDetail(
   journalSlug: string,
-  articleId: string
+  articleSlug: string
 ): Promise<ArticleDetailResponse | null> {
   try {
     const res = await fetch(
-      `https://smrg.arditsonline.com/public/api/journals/${journalSlug}/article/${articleId}`,
+      `https://smrg.arditsonline.com/public/api/journals/${journalSlug}/article/${articleSlug}`,
       { next: { revalidate: 900 } }
     );
     if (!res.ok) return null;
@@ -216,6 +227,48 @@ export async function getArticleDetail(
     return json?.data ?? null;
   } catch {
     return null;
+  }
+}
+
+/**
+ * Resolve an article by its numeric id: the journal article list only exposes
+ * ids, while the detail API expects slugs. Derive the slug from the matching
+ * article title and verify the API returned the same id.
+ */
+export async function getArticleDetailById(
+  journal: Journal,
+  articleId: string
+): Promise<ArticleDetailResponse | null> {
+  const targetId = Number(articleId);
+  if (!Number.isFinite(targetId)) return null;
+
+  const summary = journal.allArticles?.find(
+    (article) => article.id === targetId
+  );
+  if (!summary) return null;
+
+  const articleSlug = slugify(summary.title);
+  if (!articleSlug) return null;
+
+  const data = await getArticleDetail(journal.slug, articleSlug);
+  if (!data || Number(data.article?.id) !== targetId) return null;
+
+  return data;
+}
+
+// Section files are standalone HTML documents; fetch their content for display.
+export async function getArticleSectionContent(
+  section: ArticleDetailSection
+): Promise<ArticleDetailSection> {
+  if (!section.url) return { ...section, content: "" };
+
+  try {
+    const res = await fetch(section.url, { next: { revalidate: 900 } });
+    if (!res.ok) return { ...section, content: "" };
+    const html = await res.text();
+    return { ...section, content: extractArticleHtml(html) };
+  } catch {
+    return { ...section, content: "" };
   }
 }
 

@@ -968,6 +968,64 @@ a {
   border-left: 3px solid var(--primary);
 }
 
+/* Rendered section HTML returned by the article API */
+.article-html-content > *:first-child {
+  margin-top: 0;
+}
+
+.article-html-content > *:last-child {
+  margin-bottom: 0;
+}
+
+.article-html-content p {
+  margin: 0 0 1rem;
+}
+
+.article-html-content h1,
+.article-html-content h2,
+.article-html-content h3,
+.article-html-content h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin: 1.25rem 0 0.5rem;
+  padding-left: 0.5rem;
+  border-left: 3px solid var(--primary);
+}
+
+.article-html-content ul,
+.article-html-content ol {
+  margin: 0 0 1rem;
+  padding-left: 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.article-html-content a {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.article-html-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.article-html-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 1rem;
+}
+
+.article-html-content th,
+.article-html-content td {
+  border: 1px solid var(--border);
+  padding: 0.5rem;
+  text-align: left;
+}
+
 .article-reference-list {
   padding-left: 1.25rem;
   display: flex;

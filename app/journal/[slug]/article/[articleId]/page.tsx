@@ -2,20 +2,16 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import Container from "@/components/layout/Container";
-import { getJournalDetails, getArticleDetail, getArticleSections } from "@/lib/api";
+import {
+  getJournalDetails,
+  getArticleDetailById,
+  getArticleSectionContent,
+  ArticleDetailSection,
+} from "@/lib/api";
 
 type Props = {
   params: Promise<{ slug: string; articleId: string }>;
 };
-
-const articleNavigationSections = [
-  { id: "abstract", label: "Abstract" },
-  { id: "introduction", label: "Introduction" },
-  { id: "methods", label: "Methods" },
-  { id: "results", label: "Results" },
-  { id: "discussion", label: "Discussion" },
-  { id: "references", label: "References" },
-];
 
 function articleSectionId(title: string): string {
   const normalizedTitle = title.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
@@ -30,40 +26,39 @@ function articleSectionId(title: string): string {
   return `article-section-${sectionId}`;
 }
 
-function detectSubheading(text: string): { subheading: string; rest: string } | null {
-  const patterns = [
-    /^([A-Z][^:.\n]{2,50}):\s+(.+)/,
-    /^([A-Z][^:.\n]{2,50})\.\s+(.+)/,
-  ];
-
-  for (const pattern of patterns) {
-    const match = text.match(pattern);
-    if (match) {
-      return { subheading: match[1].trim(), rest: match[2].trim() };
-    }
-  }
-  return null;
-}
-
 export default async function ArticleDetailPage({ params }: Props) {
   const { slug, articleId } = await params;
   const journal = await getJournalDetails(slug);
-  const articleData = await getArticleDetail(slug, articleId);
 
-  if (!journal || !articleData) {
+  if (!journal) {
+    notFound();
+  }
+
+  // Match the requested numeric id against the journal article list, then load
+  // the detail from the slug-based article API.
+  const articleData = await getArticleDetailById(journal, articleId);
+
+  if (!articleData) {
     notFound();
   }
 
   const { article } = articleData;
-  const articleSections = article.sections?.length
-    ? article.sections
-    : await getArticleSections();
 
-  const abstractSection = articleSections.find((s) => s.title === "Abstract");
-  const otherSections = articleSections.filter((s) => s.title !== "Abstract");
-  const hasReferencesSection = otherSections.some((section) =>
-    section.title.toLowerCase().includes("reference")
-  );
+  const sections = (
+    await Promise.all(
+      (article.sections ?? []).map((section) => getArticleSectionContent(section))
+    )
+  ).filter((section) => section.content);
+
+  const navigationSections = [
+    ...(article.abstract
+      ? [{ id: articleSectionId("abstract"), label: "Abstract" }]
+      : []),
+    ...sections.map((section) => ({
+      id: articleSectionId(section.title),
+      label: section.title,
+    })),
+  ];
 
   return (
     <>
@@ -91,8 +86,8 @@ export default async function ArticleDetailPage({ params }: Props) {
           <div className="article-detail-container">
             <nav className="article-section-nav" aria-label="Article sections">
               <h2 className="article-section-nav-title">On this page</h2>
-              {articleNavigationSections.map((section) => (
-                <a key={section.id} href={`#article-section-${section.id}`}>
+              {navigationSections.map((section) => (
+                <a key={section.id} href={`#${section.id}`}>
                   {section.label}
                 </a>
               ))}
@@ -183,47 +178,26 @@ export default async function ArticleDetailPage({ params }: Props) {
                 </div>
               )}
 
-              {abstractSection && (
-                <section id={articleSectionId(abstractSection.title)} className="article-detail-block">
+              {article.abstract && (
+                <section id={articleSectionId("abstract")} className="article-detail-block">
                   <h2 className="article-detail-block-title">Abstract</h2>
-                  <p className="article-detail-text">{abstractSection.content}</p>
+                  <p className="article-detail-text">{article.abstract}</p>
                 </section>
               )}
 
-              {otherSections.map((section) => (
-                <section key={section.title} id={articleSectionId(section.title)} className="article-detail-block">
+              {sections.map((section: ArticleDetailSection) => (
+                <section
+                  key={section.title}
+                  id={articleSectionId(section.title)}
+                  className="article-detail-block"
+                >
                   <h2 className="article-detail-block-title">{section.title}</h2>
-                  <div className="article-detail-text">
-                    {section.content.split("\n\n").map((para, j) => {
-                      const result = detectSubheading(para);
-                      if (result) {
-                        return (
-                          <div key={j} style={{ marginBottom: j > 0 ? "1rem" : 0 }}>
-                            <h3 className="article-subheading">{result.subheading}</h3>
-                            <p>{result.rest}</p>
-                          </div>
-                        );
-                      }
-                      return (
-                        <p key={j} style={{ marginBottom: j > 0 ? "1rem" : 0 }}>
-                          {para}
-                        </p>
-                      );
-                    })}
-                  </div>
+                  <div
+                    className="article-detail-text article-html-content"
+                    dangerouslySetInnerHTML={{ __html: section.content ?? "" }}
+                  />
                 </section>
               ))}
-
-              {!hasReferencesSection && article.references?.length ? (
-                <section id="article-section-references" className="article-detail-block">
-                  <h2 className="article-detail-block-title">References</h2>
-                  <ol className="article-reference-list">
-                    {article.references.map((reference, index) => (
-                      <li key={index} className="article-reference-item">{reference}</li>
-                    ))}
-                  </ol>
-                </section>
-              ) : null}
             </div>
 
             <aside className="article-detail-sidebar">
@@ -253,7 +227,7 @@ export default async function ArticleDetailPage({ params }: Props) {
                 <h3 className="article-sidebar-title">Journal Info</h3>
                 <div className="article-sidebar-info">
                   <p className="article-info-label">Journal</p>
-                  <p className="article-info-value">{article.journal}</p>
+                  <p className="article-info-value">{articleData.journal.name}</p>
                 </div>
                 {article.citations && (
                   <div className="article-sidebar-info">
