@@ -680,6 +680,27 @@ a {
   border-radius: 20px;
 }
 
+.journal-meta-article {
+  display: inline-block;
+  margin-left: 0.75rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+  font-weight: 500;
+  vertical-align: middle;
+}
+
+.journal-article-link {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--primary);
+  text-decoration: none;
+  margin-left: 0.25rem;
+}
+
+.journal-article-link:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 1024px) {
   .journal-sidebar-layout {
     grid-template-columns: 200px 1fr;

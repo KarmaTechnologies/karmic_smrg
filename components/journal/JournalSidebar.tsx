@@ -181,7 +181,9 @@ export default function JournalSidebar({
   const currentIssue = currentVolume
     ? sortIssues(currentVolume.issues ?? [])[0]
     : undefined;
-  const currentIssueArticles = currentIssue?.articles ?? [];
+  const currentIssueArticles = ((currentIssue?.articles as unknown as number[])
+    .map((articleId) => articles.find((a) => a.id === articleId))
+    .filter(Boolean)) as Article[];
 
   const articlesInPress = articles.filter((article) =>
     (article.publication_status ?? "").toLowerCase().includes("in press")
@@ -322,17 +324,20 @@ export default function JournalSidebar({
                           Published: {formatDate(currentIssue.publication_date)}
                         </span>
                       )}
+                      {currentIssueArticles.length > 0 && (
+                        <span className="journal-meta-article">
+                          Article:{" "}
+                          <Link
+                            href={`/journal/${journalSlug}/article/${currentIssueArticles[0].slug || slugify(currentIssueArticles[0].title) || currentIssueArticles[0].id}`}
+                            className="journal-article-link"
+                          >
+                            {currentIssueArticles[0].title}
+                          </Link>
+                        </span>
+                      )}
                     </p>
                   )}
                 </div>
-                {currentIssueArticles.length > 0 ? (
-                  <ArticleCards
-                    articles={currentIssueArticles}
-                    journalSlug={journalSlug}
-                  />
-                ) : (
-                  <p>No articles in this issue yet.</p>
-                )}
               </div>
             )}
           </div>
@@ -367,31 +372,44 @@ export default function JournalSidebar({
                       className="journal-volume-card"
                     >
                       <h3 className="journal-volume-title">
-                        Volume {volume.volume_no ?? "—"}
+                        Volume {volume.volume_no ?? "—"} ({volume.publishing_year ?? "—"})
                       </h3>
-                      <p className="journal-volume-meta">
-                        {volume.publishing_year && (
-                          <span>Year: {volume.publishing_year}</span>
-                        )}
-                        <span>
-                          {issues.length} issue{issues.length === 1 ? "" : "s"}
-                        </span>
-                      </p>
-                      {issues.length > 0 && (
-                        <div className="journal-issue-chips">
+                      {issues.length > 0 ? (
+                        <div className="journal-issue-list">
                           {issues.map((issue, j) => {
-                            const date = formatDate(issue.publication_date);
+                            const issueArticles = ((issue.articles as unknown as number[])
+                              .map((articleId) => articles.find((a) => a.id === articleId))
+                              .filter(Boolean)) as Article[];
                             return (
-                              <span
+                              <div
                                 key={`${issue.issue_no}-${j}`}
-                                className="journal-issue-chip"
+                                className="journal-issue-card"
                               >
-                                Issue {issue.issue_no ?? "—"}
-                                {date ? ` · ${date}` : ""}
-                              </span>
+                                <div className="journal-volume-meta">
+                                  <span>issue no: {issue.issue_no ?? "—"}</span>
+                                  {issue.publication_date && (
+                                    <span>
+                                      Publication Date: {formatDate(issue.publication_date)}
+                                    </span>
+                                  )}
+                                  {issueArticles.length > 0 && (
+                                    <span className="journal-meta-article">
+                                      Article:{" "}
+                                      <Link
+                                        href={`/journal/${journalSlug}/article/${issueArticles[0].slug || slugify(issueArticles[0].title) || issueArticles[0].id}`}
+                                        className="journal-article-link"
+                                      >
+                                        {issueArticles[0].title}
+                                      </Link>
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
                             );
                           })}
                         </div>
+                      ) : (
+                        <p className="journal-issue-empty">No issues in this volume.</p>
                       )}
                     </div>
                   );
@@ -423,13 +441,23 @@ export default function JournalSidebar({
                       )}
                       {formatDate(issue.publication_date) && (
                         <span>
-                          Published: {formatDate(issue.publication_date)}
+                          Publication Date: {formatDate(issue.publication_date)}
                         </span>
                       )}
-                      <span>
-                        {issue.articles?.length ?? 0} article
-                        {(issue.articles?.length ?? 0) === 1 ? "" : "s"}
-                      </span>
+                      {(issue.articles as unknown as number[])
+                        .map((articleId) => articles.find((a) => a.id === articleId))
+                        .filter((article): article is Article => !!article)
+                        .map((article) => (
+                          <span className="journal-meta-article" key={article.id}>
+                            Article:{" "}
+                            <Link
+                              href={`/journal/${journalSlug}/article/${article.slug || slugify(article.title) || article.id}`}
+                              className="journal-article-link"
+                            >
+                              {article.title}
+                            </Link>
+                          </span>
+                        ))}
                     </p>
                   </div>
                 ))}
