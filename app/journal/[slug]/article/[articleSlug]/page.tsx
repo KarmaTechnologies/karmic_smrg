@@ -4,13 +4,13 @@ import Link from "next/link";
 import Container from "@/components/layout/Container";
 import {
   getJournalDetails,
-  getArticleDetailById,
+  getArticleDetailBySlug,
   getArticleSectionContent,
   ArticleDetailSection,
 } from "@/lib/api";
 
 type Props = {
-  params: Promise<{ slug: string; articleId: string }>;
+  params: Promise<{ slug: string; articleSlug: string }>;
 };
 
 function articleSectionId(title: string): string {
@@ -27,16 +27,14 @@ function articleSectionId(title: string): string {
 }
 
 export default async function ArticleDetailPage({ params }: Props) {
-  const { slug, articleId } = await params;
+  const { slug, articleSlug } = await params;
   const journal = await getJournalDetails(slug);
 
   if (!journal) {
     notFound();
   }
 
-  // Match the requested numeric id against the journal article list, then load
-  // the detail from the slug-based article API.
-  const articleData = await getArticleDetailById(journal, articleId);
+  const articleData = await getArticleDetailBySlug(journal, articleSlug);
 
   if (!articleData) {
     notFound();

@@ -231,27 +231,36 @@ export async function getArticleDetail(
 }
 
 /**
- * Resolve an article by its numeric id: the journal article list only exposes
- * ids, while the detail API expects slugs. Derive the slug from the matching
- * article title and verify the API returned the same id.
+ * Resolve an article route segment against the journal article list. Numeric
+ * segments remain supported for links created before article-name URLs.
  */
-export async function getArticleDetailById(
+export async function getArticleDetailBySlug(
   journal: Journal,
-  articleId: string
+  articleSlugOrId: string
 ): Promise<ArticleDetailResponse | null> {
-  const targetId = Number(articleId);
-  if (!Number.isFinite(targetId)) return null;
+  const isLegacyId = /^\d+$/.test(articleSlugOrId);
+  let articleSlug = articleSlugOrId;
+  let expectedArticleId: number | undefined;
 
-  const summary = journal.allArticles?.find(
-    (article) => article.id === targetId
-  );
-  if (!summary) return null;
+  if (isLegacyId) {
+    const summary = journal.allArticles?.find(
+      (article) => article.id === Number(articleSlugOrId)
+    );
+    if (!summary) return null;
 
-  const articleSlug = slugify(summary.title);
+    articleSlug = summary.slug || slugify(summary.title);
+    expectedArticleId = summary.id;
+  }
   if (!articleSlug) return null;
 
   const data = await getArticleDetail(journal.slug, articleSlug);
-  if (!data || Number(data.article?.id) !== targetId) return null;
+  if (!data) return null;
+  if (
+    expectedArticleId !== undefined &&
+    Number(data.article?.id) !== expectedArticleId
+  ) {
+    return null;
+  }
 
   return data;
 }

@@ -1,6 +1,7 @@
 export type Article = {
   id: number;
   title: string;
+  slug?: string;
   abstract?: string;
   article_type?: string;
   publication_status?: string;
@@ -12,6 +13,18 @@ export type Article = {
 };
 
 export type Keyword = string | { keyword?: string; name?: string; title?: string };
+
+export type JournalIssue = {
+  issue_no?: string | number;
+  publication_date?: string;
+  articles?: Article[];
+};
+
+export type JournalVolume = {
+  volume_no?: string | number;
+  publishing_year?: string | number;
+  issues?: JournalIssue[];
+};
 
 export type PersonMember = {
   display_name?: string;
@@ -39,6 +52,7 @@ export type Journal = {
   allArticles?: Article[];
   keywords?: Keyword[];
   people_members?: PersonMember[];
+  volumes?: JournalVolume[];
 };
 
 export type JournalsApiResponse = {

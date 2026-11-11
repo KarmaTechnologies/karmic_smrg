@@ -47,6 +47,7 @@ export default async function JournalDetailPage({ params }: Props) {
               keywords={journal.keywords}
               peopleMembers={journal.people_members}
               highlights={journal.highlights}
+              volumes={journal.volumes}
           />
         </Container>
       </section>
