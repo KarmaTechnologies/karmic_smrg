@@ -71,6 +71,15 @@ function sortIssues(issues: JournalIssue[]): JournalIssue[] {
   });
 }
 
+function getIssueArticles(
+  issue: JournalIssue | undefined,
+  articles: Article[]
+): Article[] {
+  return (issue?.articles ?? [])
+    .map((articleId) => articles.find((article) => article.id === articleId))
+    .filter((article): article is Article => article !== undefined);
+}
+
 function ArticleCards({
   articles,
   journalSlug,
@@ -181,9 +190,7 @@ export default function JournalSidebar({
   const currentIssue = currentVolume
     ? sortIssues(currentVolume.issues ?? [])[0]
     : undefined;
-  const currentIssueArticles = ((currentIssue?.articles as unknown as number[])
-    .map((articleId) => articles.find((a) => a.id === articleId))
-    .filter(Boolean)) as Article[];
+  const currentIssueArticles = getIssueArticles(currentIssue, articles);
 
   const articlesInPress = articles.filter((article) =>
     (article.publication_status ?? "").toLowerCase().includes("in press")
@@ -377,9 +384,7 @@ export default function JournalSidebar({
                       {issues.length > 0 ? (
                         <div className="journal-issue-list">
                           {issues.map((issue, j) => {
-                            const issueArticles = ((issue.articles as unknown as number[])
-                              .map((articleId) => articles.find((a) => a.id === articleId))
-                              .filter(Boolean)) as Article[];
+                            const issueArticles = getIssueArticles(issue, articles);
                             return (
                               <div
                                 key={`${issue.issue_no}-${j}`}
@@ -444,9 +449,7 @@ export default function JournalSidebar({
                           Publication Date: {formatDate(issue.publication_date)}
                         </span>
                       )}
-                      {(issue.articles as unknown as number[])
-                        .map((articleId) => articles.find((a) => a.id === articleId))
-                        .filter((article): article is Article => !!article)
+                      {getIssueArticles(issue, articles)
                         .map((article) => (
                           <span className="journal-meta-article" key={article.id}>
                             Article:{" "}

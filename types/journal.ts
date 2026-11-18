@@ -17,7 +17,7 @@ export type Keyword = string | { keyword?: string; name?: string; title?: string
 export type JournalIssue = {
   issue_no?: string | number;
   publication_date?: string;
-  articles?: Article[];
+  articles?: number[];
 };
 
 export type JournalVolume = {
