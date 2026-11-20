@@ -265,6 +265,100 @@ export async function getArticleDetailBySlug(
   return data;
 }
 
+// Auth: Signup
+export type SignupResponse = {
+  message?: string;
+  user?: { id: number; name: string; email: string };
+  token?: string | null;
+};
+
+export type SignupResult =
+  | { ok: true; data: SignupResponse }
+  | { ok: false; error: string };
+
+export async function signup(data: {
+  name: string;
+  email: string;
+  password: string;
+}): Promise<SignupResult> {
+  const baseUrl = "https://smrg.arditsonline.com";
+  try {
+    const response = await fetch(`${baseUrl}/public/api/signup`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    const body = (await response.json().catch(() => ({}))) as
+      | SignupResponse
+      | { message?: string };
+
+    if (!response.ok) {
+      return {
+        ok: false,
+        error: body?.message || "Signup failed",
+      };
+    }
+
+    return { ok: true, data: body as SignupResponse };
+  } catch (err) {
+    return {
+      ok: false,
+      error: err instanceof Error ? err.message : "Signup failed",
+    };
+  }
+}
+
+// Auth: Login
+export type LoginResponse = {
+  message?: string;
+  user?: { id: number; name: string; email: string };
+  token?: string | null;
+};
+
+export type LoginResult =
+  | { ok: true; data: LoginResponse }
+  | {
+      ok: false;
+      error: string;
+      status?: number;
+      body?: unknown;
+    };
+
+export async function login(data: {
+  email: string;
+  password: string;
+}): Promise<LoginResult> {
+  const baseUrl = "https://smrg.arditsonline.com";
+  try {
+    const response = await fetch(`${baseUrl}/public/api/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    const body = (await response.json().catch(() => ({}))) as
+      | LoginResponse
+      | { message?: string };
+
+    if (!response.ok) {
+      return {
+        ok: false,
+        error: body?.message || `Login failed (${response.status})`,
+        status: response.status,
+        body,
+      };
+    }
+
+    return { ok: true, data: body as LoginResponse };
+  } catch (err) {
+    return {
+      ok: false,
+      error: err instanceof Error ? err.message : "Login failed",
+    };
+  }
+}
+
 // Section files are standalone HTML documents; fetch their content for display.
 export async function getArticleSectionContent(
   section: ArticleDetailSection

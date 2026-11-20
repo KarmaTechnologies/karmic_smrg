@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import Shell from "@/components/layout/Shell";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -27,10 +26,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
-      <body style={{ display: "flex", flexDirection: "column" }}>
-        <Navbar />
-        <main style={{ flex: 1 }}>{children}</main>
-        <Footer />
+      <body>
+        <Shell>{children}</Shell>
       </body>
     </html>
   );
